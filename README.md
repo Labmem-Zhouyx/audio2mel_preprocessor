@@ -7,11 +7,12 @@ You can use it to prepare the data for training acoustic model(eg. Tacotron2)/vo
 1. Download or prepare your speech datasets.
 
 2. Transform them from audio to mel-spectrogram(saved as numpy files).
+
 `python preprocess.py --dataset=DataBaker --indir=path/BZNSYP --outdir=./training_data`  
 
 3. To support more dataset type, you can define additional processing script in "./datasets/", just refer to "ljspeech.py" & "databaker.py".(Welcome to commit!)
 
-5. The data will be processed as:
+4. The data will be processed as:
 
  outdir/
 

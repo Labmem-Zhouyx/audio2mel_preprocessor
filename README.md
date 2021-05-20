@@ -26,7 +26,7 @@ You can use it to prepare the data for training acoustic model(eg. Tacotron2)/vo
 
 ## Supplementary
 1. "MultiSets" is used for multi-speaker or multilingual dataset.
-2. 
-3. "config.json" is used to extract mel-spectrogram under different acoustic parameters, we provide 16k and 22.5k as reference. 
+
+2. "config.json" is used to extract mel-spectrogram under different acoustic parameters, we provide 16k and 22.5k as reference. 
 
     

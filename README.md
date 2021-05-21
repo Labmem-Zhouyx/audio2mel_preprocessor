@@ -10,7 +10,7 @@ You can use it to prepare the data for training acoustic model(eg. Tacotron2)/vo
 
 `python preprocess.py --dataset=DataBaker --indir=path/BZNSYP --outdir=./training_data`  
 
-3. To support more dataset type, you can define additional processing script in "./datasets/", just refer to "ljspeech.py" & "databaker.py".(Welcome to commit!)
+3. To support more dataset type, you can define additional processing script in "./datasets/", just refer to "ljspeech.py" & "databaker.py".(Welcome to commit !)
 
 4. The data will be processed as:
 
@@ -28,6 +28,6 @@ You can use it to prepare the data for training acoustic model(eg. Tacotron2)/vo
 ## Supplementary
 1. "MultiSets" is used for multi-speaker or multilingual dataset.
 
-2. "config.json" is used to extract mel-spectrogram under different acoustic parameters, we provide 16k and 22.5k as reference. 
+2. "config.json" is used to extract mel-spectrogram under different acoustic parameters, we provide 16k and 22k as reference("./datasets/config16k.json"). 
 
     

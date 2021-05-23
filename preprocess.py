@@ -44,7 +44,7 @@ def main():
 	if args.dataset == 'LJSpeech':
 		metadata = ljspeech.build_from_path(in_dir, mel_dir, lin_dir, wav_dir, args.config_file, args.n_jobs, tqdm=tqdm)
 	elif args.dataset == 'DataBaker':
-		use_prosody = False
+		use_prosody = True
 		metadata = databaker.build_from_path(in_dir, use_prosody, mel_dir, lin_dir, wav_dir, args.config_file, args.n_jobs, tqdm=tqdm)
 	elif args.dataset == 'MultiSets':
 		metadata = multisets.build_from_path(in_dir, mel_dir, lin_dir, wav_dir, args.config_file, args.n_jobs, tqdm=tqdm)

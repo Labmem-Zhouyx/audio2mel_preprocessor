@@ -40,9 +40,9 @@ def build_from_path(input_dir, use_prosody, mel_dir, linear_dir, wav_dir, config
 	for idx in range(num):
 		res = _parse_cn_prosody_label(content[idx * 2], content[idx * 2 + 1], use_prosody)
 		if res is not None:
-			basename, text = res
+			basename, text, text_pinyin = res
 			wav_path = os.path.join(input_dir, 'Wave', '{}.wav'.format(basename))
-			futures.append(executor.submit(partial(_process_utterance, mel_dir, linear_dir, wav_dir, basename, wav_path, text, config_file)))
+			futures.append(executor.submit(partial(_process_utterance, mel_dir, linear_dir, wav_dir, basename, wav_path, text, text_pinyin, config_file)))
 
 	return [future.result() for future in tqdm(futures) if future.result() is not None]
 
@@ -97,42 +97,50 @@ def _parse_cn_prosody_label(text, pinyin, use_prosody=False):
 	text = re.sub('[“”、，。：；？！—…#（）]', '', text)
 
 	# split into sub-terms
-	sen_id, texts  = text.split()
+	sen_id, texts = text.split()
 	phones = pinyin.split()
 
 	# prosody boundary tag (SYL: 音节, PWD: 韵律词, PPH: 韵律短语, IPH: 语调短语, SEN: 语句)
-	# SYL = '-'
-	SYL = ' '
+	SYL = '-'
 	PWD = ' '
 	PPH = ' / ' if use_prosody==True else ' '
-	# IPH = ', '
-	IPH = ' '
-	# SEN = '.'
-	SEN = ' '
+	IPH = ', '
+	SEN = '.'
 
 	# parse details
 	pinyin = ''
+	text_aft = ''
 	i = 0 # texts index
 	j = 0 # phones index
 	b = 1 # left is boundary
 	while i < len(texts):
 		if texts[i].isdigit():
-			if texts[i] == '1': pinyin += PWD  # Prosodic Word, 韵律词边界
-			if texts[i] == '2': pinyin += PPH  # Prosodic Phrase, 韵律短语边界
-			if texts[i] == '3': pinyin += IPH  # Intonation Phrase, 语调短语边界
-			if texts[i] == '4': pinyin += SEN  # Sentence, 语句结束
+			if texts[i] == '1':
+				pinyin += PWD  # Prosodic Word, 韵律词边界
+			if texts[i] == '2':
+				pinyin += PPH  # Prosodic Phrase, 韵律短语边界
+			if texts[i] == '3':
+				pinyin += IPH  # Intonation Phrase, 语调短语边界
+				text_aft += IPH
+			if texts[i] == '4':
+				pinyin += SEN  # Sentence, 语句结束
+				text_aft += SEN
 			b  = 1
 			i += 1
+
 		elif texts[i]!='儿' or j==0 or not _is_erhua(phones[j-1][:-1]): # Chinese segment
 			if b == 0: pinyin += SYL  # Syllable, 音节边界（韵律词内部）
 			pinyin += phones[j]
+			text_aft += texts[i]
 			b  = 0
 			i += 1
 			j += 1
+
 		else: # 儿化音
+			text_aft += texts[i]
 			i += 1
 
-	return (sen_id, pinyin)
+	return (sen_id, text_aft, pinyin)
 
 
 def _is_erhua(pinyin):
@@ -147,7 +155,7 @@ def _is_erhua(pinyin):
 		return False
 
 
-def _process_utterance(mel_dir, linear_dir, wav_dir, index, wav_path, text, config_file):
+def _process_utterance(mel_dir, linear_dir, wav_dir, index, wav_path, text, text_pinyin, config_file):
 	"""
 	Preprocesses a single utterance wav/text pair
 
@@ -182,4 +190,4 @@ def _process_utterance(mel_dir, linear_dir, wav_dir, index, wav_path, text, conf
 	np.save(os.path.join(linear_dir, linear_filename), linear_spectrogram, allow_pickle=False)
 
 	# Return a tuple describing this training example
-	return (audio_filename, mel_filename, linear_filename, time_steps, mel_frames, text)
+	return (audio_filename, mel_filename, linear_filename, time_steps, mel_frames, text, text_pinyin)

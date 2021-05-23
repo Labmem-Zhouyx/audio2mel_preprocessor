@@ -103,8 +103,8 @@ def _parse_cn_prosody_label(text, pinyin, use_prosody=False):
 	# prosody boundary tag (SYL: 音节, PWD: 韵律词, PPH: 韵律短语, IPH: 语调短语, SEN: 语句)
 	SYL = '-'
 	PWD = ' '
-	PPH = ' / ' if use_prosody==True else ' '
-	IPH = ', '
+	PPH = '/' if use_prosody==True else ' '
+	IPH = ','
 	SEN = '.'
 
 	# parse details

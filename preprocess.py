@@ -4,7 +4,7 @@ import json
 from multiprocessing import cpu_count
 
 from tqdm import tqdm
-from datasets import ljspeech, databaker, multisets
+from datasets import ljspeech, databaker, multisets, aishell3
 
 
 def write_metadata(metadata, out_dir, sr):
@@ -48,6 +48,9 @@ def main():
 		metadata = databaker.build_from_path(in_dir, use_prosody, mel_dir, lin_dir, wav_dir, args.config_file, args.n_jobs, tqdm=tqdm)
 	elif args.dataset == 'MultiSets':
 		metadata = multisets.build_from_path(in_dir, mel_dir, lin_dir, wav_dir, args.config_file, args.n_jobs, tqdm=tqdm)
+	elif args.dataset == 'AIShell-3':
+		use_prosody = False
+		metadata = aishell3.build_from_path(in_dir, use_prosody, mel_dir, lin_dir, wav_dir, args.config_file, args.n_jobs, tqdm=tqdm)
 	else:
 		raise ValueError('Unsupported dataset provided: {} '.format(args.dataset))
 	

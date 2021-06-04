@@ -7,7 +7,7 @@ import re
 from datasets import mel
 
 
-def build_from_path(input_dir, use_prosody, mel_dir, linear_dir, wav_dir, config_file, n_jobs=12, tqdm=lambda x: x):
+def build_from_path(input_dir, use_prosody, mel_dir, linear_dir, wav_dir, config_file, speaker_id="BZNSYP", n_jobs=12, tqdm=lambda x: x):
 	"""
 	Preprocesses the DataBaker dataset from a gven input path to given output directories
 	(https://www.data-baker.com/open_source.html)
@@ -42,7 +42,7 @@ def build_from_path(input_dir, use_prosody, mel_dir, linear_dir, wav_dir, config
 		if res is not None:
 			basename, text, text_pinyin = res
 			wav_path = os.path.join(input_dir, 'Wave', '{}.wav'.format(basename))
-			futures.append(executor.submit(partial(_process_utterance, mel_dir, linear_dir, wav_dir, basename, wav_path, text, text_pinyin, config_file)))
+			futures.append(executor.submit(partial(_process_utterance, mel_dir, linear_dir, wav_dir, basename, wav_path, text, text_pinyin, speaker_id, config_file)))
 
 	return [future.result() for future in tqdm(futures) if future.result() is not None]
 
@@ -155,7 +155,7 @@ def _is_erhua(pinyin):
 		return False
 
 
-def _process_utterance(mel_dir, linear_dir, wav_dir, index, wav_path, text, text_pinyin, config_file):
+def _process_utterance(mel_dir, linear_dir, wav_dir, index, wav_path, text, text_pinyin, speaker_id, config_file):
 	"""
 	Preprocesses a single utterance wav/text pair
 
@@ -190,4 +190,4 @@ def _process_utterance(mel_dir, linear_dir, wav_dir, index, wav_path, text, text
 	np.save(os.path.join(linear_dir, linear_filename), linear_spectrogram, allow_pickle=False)
 
 	# Return a tuple describing this training example
-	return (audio_filename, mel_filename, linear_filename, time_steps, mel_frames, text, text_pinyin)
+	return (audio_filename, mel_filename, linear_filename, time_steps, mel_frames, text, text_pinyin, speaker_id)

@@ -7,7 +7,7 @@ import re
 from datasets import mel
 
 
-def build_from_path(input_dir, use_prosody, mel_dir, linear_dir, wav_dir, config_file, speaker_id="BZNSYP", n_jobs=12, tqdm=lambda x: x):
+def build_from_path(input_dir, use_prosody, mel_dir, linear_dir, wav_dir, config_file, n_jobs=12, tqdm=lambda x: x, speaker_id="BZNSYP"):
 	"""
 	Preprocesses the DataBaker dataset from a gven input path to given output directories
 	(https://www.data-baker.com/open_source.html)

@@ -31,8 +31,11 @@ You can use it to prepare the data for training acoustic model(eg. Tacotron2)/vo
 2. "config.json" is used to extract mel-spectrogram under different acoustic parameters, we provide 16k and 22k as reference("./datasets/config16k.json"). 
 
 3. Now support dataset params:
+
 DataBaker(BZNSYP):https://www.data-baker.com/#/data/index/source
+
 AIShell-3:https://www.openslr.org/resources/93/data_aishell3.tgz
+
 LJSpeech:https://data.keithito.com/data/speech/LJSpeech-1.1.tar.bz2
 
     

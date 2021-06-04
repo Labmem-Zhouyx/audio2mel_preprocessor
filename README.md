@@ -30,7 +30,9 @@ You can use it to prepare the data for training acoustic model(eg. Tacotron2)/vo
 
 2. "config.json" is used to extract mel-spectrogram under different acoustic parameters, we provide 16k and 22k as reference("./datasets/config16k.json"). 
 
-3. Now support dataset params:
+3. Linear spectrograms require very large memory, if not need, you could delete the "linears/" in the outdir.
+
+4. Now support dataset params:
 
 DataBaker(BZNSYP):https://www.data-baker.com/#/data/index/source
 
